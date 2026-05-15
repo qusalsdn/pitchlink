@@ -15,14 +15,8 @@ const matchSchema = z.object({
   title: z.string().min(1, "제목을 입력해주세요"),
   location: z.string().min(1, "장소를 입력해주세요"),
   matchDate: z.string().min(1, "날짜와 시간을 선택해주세요"),
-  maxPlayers: z.preprocess(
-    (val) => (val === "" || val == null ? null : Number(val)),
-    z.number().min(2, "최소 2명 이상이어야 합니다").nullable().optional(),
-  ),
-  participationFee: z.preprocess(
-    (val) => (val === "" || val == null ? null : Number(val)),
-    z.number().min(0, "0원 이상이어야 합니다").nullable().optional(),
-  ),
+  maxPlayers: z.coerce.number().min(2, "최소 2명 이상이어야 합니다").nullish(),
+  participationFee: z.coerce.number().min(0, "0원 이상이어야 합니다").nullish(),
   description: z.string().optional(),
 });
 
@@ -33,7 +27,6 @@ export default function NewMatchPage() {
   const supabase = createClient();
 
   const form = useForm<MatchFormData>({
-    // @ts-expect-error Zod v4 타입 호환성 문제
     resolver: zodResolver(matchSchema),
   });
   const {
@@ -89,7 +82,6 @@ export default function NewMatchPage() {
           <CardTitle>경기 생성</CardTitle>
         </CardHeader>
         <CardContent>
-          {/* @ts-expect-error React Hook Form 타입 호환성 문제 */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">제목 *</label>
