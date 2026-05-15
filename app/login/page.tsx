@@ -22,7 +22,6 @@ export default function LoginPage() {
   const supabase = createClient();
 
   const form = useForm<LoginFormData>({
-    // @ts-expect-error Zod v4 타입 호환성 문제
     resolver: zodResolver(loginSchema),
   });
   const {
