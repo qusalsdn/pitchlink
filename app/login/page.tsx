@@ -47,6 +47,21 @@ export default function LoginPage() {
       return;
     }
 
+    // 팀 소속 여부 확인 → 팀이 없으면 온보딩으로 이동
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (user) {
+      const { data: memberships } = await supabase.from("team_members").select("id").eq("user_id", user.id).limit(1);
+
+      if (!memberships || memberships.length === 0) {
+        router.push("/onboarding");
+        router.refresh();
+        return;
+      }
+    }
+
     router.push("/");
     router.refresh();
   };

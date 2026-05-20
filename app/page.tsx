@@ -2,9 +2,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDays, Users, Megaphone, LogOut, ChevronRight, Trophy } from "lucide-react";
+import { CalendarDays, Users, Megaphone, LogOut, ChevronRight } from "lucide-react";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -27,8 +26,12 @@ export default async function HomePage() {
     .select("role, teams(id, name, description)")
     .eq("user_id", user.id);
 
-  // 팀이 없을 때를 대비한 기본값
+  // 팀이 없으면 온보딩으로 리다이렉트
   const teams = teamMemberships ?? [];
+  if (teams.length === 0) {
+    redirect("/onboarding");
+  }
+
   const primaryTeam = teams[0]?.teams ?? null;
   const primaryTeamId = primaryTeam ? (primaryTeam as { id: string }).id : null;
 
@@ -78,27 +81,6 @@ export default async function HomePage() {
           <p className="text-sm text-gray-500 mt-0.5">오늘도 멋진 플레이를 기대합니다.</p>
         </section>
 
-        {/* 팀 없음 안내 */}
-        {teams.length === 0 && (
-          <Card className="border-dashed border-2 border-green-300 bg-green-50">
-            <CardContent className="py-8 text-center">
-              <Trophy className="h-10 w-10 text-green-400 mx-auto mb-3" />
-              <p className="font-medium text-gray-700 mb-1">아직 소속 팀이 없습니다</p>
-              <p className="text-sm text-gray-500 mb-4">팀을 만들거나 초대 코드로 참여해보세요.</p>
-              <div className="flex gap-2 justify-center">
-                <Link href="/teams/create">
-                  <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                    팀 만들기
-                  </Button>
-                </Link>
-                <Button size="sm" variant="outline">
-                  팀 참여하기
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         {/* 소속 팀 목록 */}
         {teams.length > 0 && (
           <section>
@@ -106,7 +88,7 @@ export default async function HomePage() {
               <h3 className="font-semibold text-gray-800 flex items-center gap-1.5">
                 <Users className="h-4 w-4 text-green-600" />내 팀
               </h3>
-              <Link href="/members" className="text-xs text-green-600 hover:underline flex items-center gap-0.5">
+              <Link href="/teams" className="text-xs text-green-600 hover:underline flex items-center gap-0.5">
                 전체 보기 <ChevronRight className="h-3 w-3" />
               </Link>
             </div>
@@ -243,7 +225,7 @@ export default async function HomePage() {
                 </CardContent>
               </Card>
             </Link>
-            <Link href="/members">
+            <Link href="/teams">
               <Card className="shadow-xs hover:shadow-sm transition-shadow cursor-pointer text-center">
                 <CardContent className="py-4 px-2">
                   <Users className="h-6 w-6 text-blue-500 mx-auto mb-1.5" />
