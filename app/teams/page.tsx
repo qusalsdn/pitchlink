@@ -3,21 +3,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users, UserCircle2, Crown, ShieldAlert } from "lucide-react";
+import { ArrowLeft, Users, UserCircle2, Crown, ShieldAlert, Settings } from "lucide-react";
 import { InviteCodeCard } from "./InviteCodeCard";
-
-// 운영진 역할 목록
-const STAFF_ROLES = ["admin", "manager", "coach", "chairman"] as const;
-
-// 역할 한글 레이블
-const ROLE_LABEL: Record<string, string> = {
-  admin: "관리자",
-  manager: "매니저",
-  coach: "코치",
-  chairman: "회장",
-  member: "회원",
-  guest: "게스트",
-};
+import { STAFF_ROLES, ROLE_LABEL } from "@/lib/constants/roles";
 
 // 포지션 한글 매핑
 const POSITION_LABEL: Record<string, string> = {
@@ -174,6 +162,15 @@ export default async function MembersPage({ searchParams }: PageProps) {
                       <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{selectedTeam.description}</p>
                     )}
                   </div>
+                  {/* 운영진만 팀 수정 버튼 표시 */}
+                  {selectedTeamInfo?.myRole && STAFF_ROLES.includes(selectedTeamInfo.myRole as (typeof STAFF_ROLES)[number]) && (
+                    <Link
+                      href={`/teams/edit?team=${selectedTeamId}`}
+                      className="shrink-0 w-9 h-9 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                    >
+                      <Settings className="h-4.5 w-4.5 text-gray-500" />
+                    </Link>
+                  )}
                 </div>
                 {/* 통계 */}
                 <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-gray-100">
@@ -196,7 +193,7 @@ export default async function MembersPage({ searchParams }: PageProps) {
             {/* ━━━ 섹션 2: 멤버 목록 ━━━ */}
             <Card className="shadow-sm">
               <CardContent className="p-4">
-                {/* 운영진 (관리자/매니저/코치/회장) */}
+                {/* 운영진 (총무/감독/코치/회장) */}
                 {staffMembers.length > 0 && (
                   <div>
                     <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-1.5">

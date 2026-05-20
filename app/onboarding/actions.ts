@@ -32,7 +32,7 @@ export async function createTeamOnboarding(formData: FormData): Promise<Onboardi
   }
 
   // 팀 생성
-  const { data: team, error: teamError } = await supabase
+  const { error: teamError } = await supabase
     .from("teams")
     .insert({
       name: name.trim(),

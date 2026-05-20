@@ -101,11 +101,15 @@ DROP POLICY IF EXISTS "팀 삭제" ON teams;
 
 ALTER TABLE teams ENABLE ROW LEVEL SECURITY;
 
--- 소속된 팀만 조회 가능
+-- 소속된 팀 또는 로그인된 사용자가 join_code로 조회 가능 (초대 코드 가입 지원)
 CREATE POLICY "팀 조회" ON teams FOR
 SELECT USING (
         is_team_any_role (id)
         OR created_by = auth.uid ()
+        OR (
+            auth.uid () IS NOT NULL
+            AND join_code IS NOT NULL
+        )
     );
 
 -- 로그인한 사용자만 팀 생성 가능
@@ -572,7 +576,7 @@ CREATE TRIGGER before_fee_payment_update
     EXECUTE FUNCTION set_paid_at_on_payment();
 
 -- =====================================================
--- 14. 고유한 팀 가입 코드 생성 함수 (기존 generate_join_code 개선)
+-- 14. 고유한 팀 가입 코드 생성 함수
 -- =====================================================
 
 CREATE OR REPLACE FUNCTION generate_unique_join_code()

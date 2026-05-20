@@ -25,7 +25,7 @@ export async function createTeam(formData: FormData): Promise<CreateTeamResult> 
   const description = formData.get("description") as string;
 
   // 팀 생성
-  const { data: team, error: teamError } = await supabase
+  const { error: teamError } = await supabase
     .from("teams")
     .insert({
       name: name.trim(),

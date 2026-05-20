@@ -37,7 +37,7 @@ export async function regenerateJoinCode(teamId: string): Promise<TeamActionResu
   }
 
   // 새 초대 코드 생성 (DB 함수 호출)
-  const { data: newCode, error: rpcError } = await supabase.rpc("generate_join_code");
+  const { data: newCode, error: rpcError } = await supabase.rpc("generate_unique_join_code");
 
   if (rpcError || !newCode) {
     console.error("초대 코드 생성 오류:", rpcError);
