@@ -25,7 +25,7 @@ export async function createTeam(formData: FormData): Promise<CreateTeamResult> 
   const description = formData.get("description") as string;
 
   // 팀 생성
-  const { data: team, error: teamError } = await supabase
+  const { error: teamError } = await supabase
     .from("teams")
     .insert({
       name: name.trim(),
@@ -38,18 +38,6 @@ export async function createTeam(formData: FormData): Promise<CreateTeamResult> 
   if (teamError) {
     console.error("팀 생성 오류:", teamError);
     return { error: "팀 생성 중 오류가 발생했습니다. 다시 시도해주세요." };
-  }
-
-  // 팀 생성자를 멤버로 추가 (관리자 역할)
-  const { error: memberError } = await supabase.from("team_members").insert({
-    team_id: team.id,
-    user_id: user.id,
-    role: "admin",
-  });
-
-  if (memberError) {
-    console.error("팀 멤버 추가 오류:", memberError);
-    return { error: "팀 멤버 추가 중 오류가 발생했습니다." };
   }
 
   revalidatePath("/");

@@ -77,6 +77,11 @@ body {
   color: var(--foreground);
 }
 
+html {
+  /* 스크롤바 공간을 항상 안정적으로 확보하여 레이아웃 밀림 방지 */
+  scrollbar-gutter: stable;
+}
+
 button,
 a {
   cursor: pointer;
