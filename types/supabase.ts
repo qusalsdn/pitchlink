@@ -14,359 +14,256 @@ export type Database = {
   }
   public: {
     Tables: {
-      announcements: {
+      attendance: {
         Row: {
-          author_id: string | null
-          club_id: string
+          id: string
+          match_id: string | null
+          note: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          match_id?: string | null
+          note?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          match_id?: string | null
+          note?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fee_payments: {
+        Row: {
+          fee_id: string | null
+          id: string
+          note: string | null
+          paid_amount: number | null
+          paid_at: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          fee_id?: string | null
+          id?: string
+          note?: string | null
+          paid_amount?: number | null
+          paid_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          fee_id?: string | null
+          id?: string
+          note?: string | null
+          paid_amount?: number | null
+          paid_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fee_payments_fee_id_fkey"
+            columns: ["fee_id"]
+            isOneToOne: false
+            referencedRelation: "team_fees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      match_comments: {
+        Row: {
           content: string
           created_at: string | null
           id: string
-          is_pinned: boolean | null
-          title: string
+          match_id: string | null
+          user_id: string | null
         }
         Insert: {
-          author_id?: string | null
-          club_id: string
           content: string
           created_at?: string | null
           id?: string
-          is_pinned?: boolean | null
-          title: string
+          match_id?: string | null
+          user_id?: string | null
         }
         Update: {
-          author_id?: string | null
-          club_id?: string
           content?: string
           created_at?: string | null
           id?: string
-          is_pinned?: boolean | null
-          title?: string
+          match_id?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "announcements_author_id_fkey"
-            columns: ["author_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "announcements_club_id_fkey"
-            columns: ["club_id"]
-            isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      clubs: {
-        Row: {
-          created_at: string | null
-          description: string | null
-          id: string
-          name: string
-        }
-        Insert: {
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          name: string
-        }
-        Update: {
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          name?: string
-        }
-        Relationships: []
-      }
-      match_participants: {
-        Row: {
-          attended: boolean | null
-          created_at: string | null
-          id: string
-          is_late: boolean | null
-          match_id: string
-          status: string | null
-          user_id: string
-        }
-        Insert: {
-          attended?: boolean | null
-          created_at?: string | null
-          id?: string
-          is_late?: boolean | null
-          match_id: string
-          status?: string | null
-          user_id: string
-        }
-        Update: {
-          attended?: boolean | null
-          created_at?: string | null
-          id?: string
-          is_late?: boolean | null
-          match_id?: string
-          status?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "match_participants_match_id_fkey"
+            foreignKeyName: "match_comments_match_id_fkey"
             columns: ["match_id"]
             isOneToOne: false
             referencedRelation: "matches"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "match_participants_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      match_stats: {
-        Row: {
-          assists: number | null
-          created_at: string | null
-          goals: number | null
-          id: string
-          match_id: string
-          mom: boolean | null
-          red_cards: number | null
-          user_id: string
-          yellow_cards: number | null
-        }
-        Insert: {
-          assists?: number | null
-          created_at?: string | null
-          goals?: number | null
-          id?: string
-          match_id: string
-          mom?: boolean | null
-          red_cards?: number | null
-          user_id: string
-          yellow_cards?: number | null
-        }
-        Update: {
-          assists?: number | null
-          created_at?: string | null
-          goals?: number | null
-          id?: string
-          match_id?: string
-          mom?: boolean | null
-          red_cards?: number | null
-          user_id?: string
-          yellow_cards?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "match_stats_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "matches"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "match_stats_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
       }
       matches: {
         Row: {
-          club_id: string
           created_at: string | null
           created_by: string | null
-          description: string | null
           id: string
-          location: string
+          location: string | null
           match_date: string
-          max_players: number | null
-          participation_fee: number | null
-          status: string | null
-          title: string
+          team_id: string | null
+          title: string | null
         }
         Insert: {
-          club_id: string
           created_at?: string | null
           created_by?: string | null
-          description?: string | null
           id?: string
-          location: string
+          location?: string | null
           match_date: string
-          max_players?: number | null
-          participation_fee?: number | null
-          status?: string | null
-          title: string
+          team_id?: string | null
+          title?: string | null
         }
         Update: {
-          club_id?: string
           created_at?: string | null
           created_by?: string | null
-          description?: string | null
           id?: string
-          location?: string
+          location?: string | null
           match_date?: string
-          max_players?: number | null
-          participation_fee?: number | null
-          status?: string | null
-          title?: string
+          team_id?: string | null
+          title?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "matches_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: "matches_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "matches_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      payments: {
-        Row: {
-          amount: number
-          club_id: string
-          created_at: string | null
-          id: string
-          memo: string | null
-          paid_at: string | null
-          payment_type: string | null
-          status: string | null
-          user_id: string
-        }
-        Insert: {
-          amount: number
-          club_id: string
-          created_at?: string | null
-          id?: string
-          memo?: string | null
-          paid_at?: string | null
-          payment_type?: string | null
-          status?: string | null
-          user_id: string
-        }
-        Update: {
-          amount?: number
-          club_id?: string
-          created_at?: string | null
-          id?: string
-          memo?: string | null
-          paid_at?: string | null
-          payment_type?: string | null
-          status?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "payments_club_id_fkey"
-            columns: ["club_id"]
-            isOneToOne: false
-            referencedRelation: "clubs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "payments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
       }
       profiles: {
         Row: {
-          attendance_score: number | null
-          club_id: string | null
+          avatar_url: string | null
           created_at: string | null
-          email: string | null
+          dominant_foot: string | null
+          full_name: string | null
+          height_cm: number | null
           id: string
-          is_active: boolean | null
-          jersey_number: number | null
-          name: string
-          nickname: string | null
+          injury_status: string | null
           phone: string | null
-          position: string | null
-          preferred_foot: string | null
-          profile_image_url: string | null
-          role: string | null
-          skill_rating: number | null
+          preferred_position: string | null
+          skill_level: number | null
           updated_at: string | null
+          weight_kg: number | null
         }
         Insert: {
-          attendance_score?: number | null
-          club_id?: string | null
+          avatar_url?: string | null
           created_at?: string | null
-          email?: string | null
+          dominant_foot?: string | null
+          full_name?: string | null
+          height_cm?: number | null
           id: string
-          is_active?: boolean | null
-          jersey_number?: number | null
-          name: string
-          nickname?: string | null
+          injury_status?: string | null
           phone?: string | null
-          position?: string | null
-          preferred_foot?: string | null
-          profile_image_url?: string | null
-          role?: string | null
-          skill_rating?: number | null
+          preferred_position?: string | null
+          skill_level?: number | null
           updated_at?: string | null
+          weight_kg?: number | null
         }
         Update: {
-          attendance_score?: number | null
-          club_id?: string | null
+          avatar_url?: string | null
           created_at?: string | null
-          email?: string | null
+          dominant_foot?: string | null
+          full_name?: string | null
+          height_cm?: number | null
           id?: string
-          is_active?: boolean | null
-          jersey_number?: number | null
-          name?: string
-          nickname?: string | null
+          injury_status?: string | null
           phone?: string | null
-          position?: string | null
-          preferred_foot?: string | null
-          profile_image_url?: string | null
-          role?: string | null
-          skill_rating?: number | null
+          preferred_position?: string | null
+          skill_level?: number | null
           updated_at?: string | null
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
+      team_fees: {
+        Row: {
+          amount: number
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          team_id: string | null
+          title: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          team_id?: string | null
+          title: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          team_id?: string | null
+          title?: string
         }
         Relationships: [
           {
-            foreignKeyName: "profiles_club_id_fkey"
-            columns: ["club_id"]
+            foreignKeyName: "team_fees_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: "clubs"
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
       }
       team_members: {
         Row: {
-          created_at: string | null
           id: string
-          team_id: string
-          user_id: string
+          joined_at: string | null
+          role: string | null
+          team_id: string | null
+          user_id: string | null
         }
         Insert: {
-          created_at?: string | null
           id?: string
-          team_id: string
-          user_id: string
+          joined_at?: string | null
+          role?: string | null
+          team_id?: string | null
+          user_id?: string | null
         }
         Update: {
-          created_at?: string | null
           id?: string
-          team_id?: string
-          user_id?: string
+          joined_at?: string | null
+          role?: string | null
+          team_id?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -376,53 +273,79 @@ export type Database = {
             referencedRelation: "teams"
             referencedColumns: ["id"]
           },
+        ]
+      }
+      team_notices: {
+        Row: {
+          content: string
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_pinned: boolean | null
+          team_id: string | null
+          title: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_pinned?: boolean | null
+          team_id?: string | null
+          title: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_pinned?: boolean | null
+          team_id?: string | null
+          title?: string
+        }
+        Relationships: [
           {
-            foreignKeyName: "team_members_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "team_notices_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
       }
       teams: {
         Row: {
-          color: string | null
           created_at: string | null
+          created_by: string | null
+          description: string | null
           id: string
-          match_id: string
+          join_code: string | null
           name: string
         }
         Insert: {
-          color?: string | null
           created_at?: string | null
+          created_by?: string | null
+          description?: string | null
           id?: string
-          match_id: string
+          join_code?: string | null
           name: string
         }
         Update: {
-          color?: string | null
           created_at?: string | null
+          created_by?: string | null
+          description?: string | null
           id?: string
-          match_id?: string
+          join_code?: string | null
           name?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "teams_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "matches"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_join_code: { Args: never; Returns: string }
     }
     Enums: {
       [_ in never]: never

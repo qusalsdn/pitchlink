@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "gen:types": "pnpm dlx supabase gen types typescript --project-id yuyhyzwcoxzzdrnkorzn > types/supabase.ts"
+    "gen:types": "pnpm dlx supabase gen types typescript --project-id ufxkftevamibsqenwfnm > types/supabase.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",
