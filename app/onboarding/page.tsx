@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createTeamOnboarding, joinTeamByCode } from "./actions";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Logo } from "@/components/Logo";
-import { Users, UserPlus, Loader2, Trophy } from "lucide-react";
+import { Users, UserPlus, Loader2, Trophy, LogOut } from "lucide-react";
 
 // 팀 생성 스키마
 const createTeamSchema = z.object({
@@ -31,9 +33,19 @@ type JoinTeamFormData = z.infer<typeof joinTeamSchema>;
 type Tab = "create" | "join";
 
 export default function OnboardingPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("create");
   const [serverError, setServerError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  // 로그아웃 핸들러
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
 
   // 팀 생성 폼
   const createForm = useForm<CreateTeamFormData>({
@@ -109,8 +121,7 @@ export default function OnboardingPage() {
                   activeTab === "create" ? "bg-white text-green-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
                 }`}
               >
-                <Users className="h-4 w-4" />
-                팀 만들기
+                <Users className="h-4 w-4" />팀 만들기
               </button>
               <button
                 type="button"
@@ -119,8 +130,7 @@ export default function OnboardingPage() {
                   activeTab === "join" ? "bg-white text-green-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
                 }`}
               >
-                <UserPlus className="h-4 w-4" />
-                팀 참여하기
+                <UserPlus className="h-4 w-4" />팀 참여하기
               </button>
             </div>
           </CardHeader>
@@ -219,6 +229,15 @@ export default function OnboardingPage() {
             )}
           </CardContent>
         </Card>
+        <button
+          type="button"
+          onClick={handleSignOut}
+          disabled={isSigningOut}
+          className="mt-4 mx-auto flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 disabled:opacity-50 transition-colors"
+        >
+          {isSigningOut ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <LogOut className="h-3.5 w-3.5" />}
+          로그아웃
+        </button>
       </div>
     </div>
   );
