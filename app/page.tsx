@@ -3,7 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDays, Users, Megaphone, LogOut, ChevronRight } from "lucide-react";
+import { CalendarDays, Users, Megaphone, LogOut, ChevronRight, UserCircle2 } from "lucide-react";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -238,6 +238,14 @@ export default async function HomePage() {
                 <CardContent className="py-4 px-2">
                   <Megaphone className="h-6 w-6 text-orange-500 mx-auto mb-1.5" />
                   <p className="text-xs font-medium text-gray-700">공지사항</p>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link href="/profile">
+              <Card className="shadow-xs hover:shadow-sm transition-shadow cursor-pointer text-center">
+                <CardContent className="py-4 px-2">
+                  <UserCircle2 className="h-6 w-6 text-purple-500 mx-auto mb-1.5" />
+                  <p className="text-xs font-medium text-gray-700">내 프로필</p>
                 </CardContent>
               </Card>
             </Link>
