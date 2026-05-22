@@ -212,9 +212,10 @@ export default async function MembersPage({ searchParams }: PageProps) {
                         const roleLabel = ROLE_LABEL[member.role ?? ""] ?? "운영진";
 
                         return (
-                          <div
+                          <Link
                             key={member.id}
-                            className="flex items-center gap-3 py-2 px-3 rounded-lg bg-yellow-50/60 border border-yellow-100"
+                            href={`/teams/member/${member.user_id}?team=${selectedTeamId}`}
+                            className="flex items-center gap-3 py-2 px-3 rounded-lg bg-yellow-50/60 border border-yellow-100 hover:bg-yellow-100/80 transition-colors cursor-pointer"
                           >
                             {/* 아바타 */}
                             <div className="w-9 h-9 rounded-full bg-yellow-100 border border-yellow-200 flex items-center justify-center shrink-0 overflow-hidden">
@@ -244,10 +245,10 @@ export default async function MembersPage({ searchParams }: PageProps) {
                             </div>
 
                             {/* 역할 배지 */}
-                            <Badge className="text-[10px] shrink-0 bg-yellow-100 text-yellow-700 hover:bg-yellow-100 border-yellow-200">
+                            <Badge className="text-[10px] shrink-0 bg-yellow-100 text-yellow-700 hover:bg-yellow-100 border-yellow-200 pointer-events-none">
                               {roleLabel}
                             </Badge>
-                          </div>
+                          </Link>
                         );
                       })}
                     </div>
@@ -277,9 +278,10 @@ export default async function MembersPage({ searchParams }: PageProps) {
                           : null;
 
                         return (
-                          <div
+                          <Link
                             key={member.id}
-                            className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors"
+                            href={`/teams/member/${member.user_id}?team=${selectedTeamId}`}
+                            className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
                           >
                             {/* 아바타 */}
                             <div className="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center shrink-0 overflow-hidden">
@@ -307,7 +309,7 @@ export default async function MembersPage({ searchParams }: PageProps) {
                                 <SkillBadge level={profile?.skill_level ?? null} />
                               </div>
                             </div>
-                          </div>
+                          </Link>
                         );
                       })}
                     </div>
@@ -330,9 +332,10 @@ export default async function MembersPage({ searchParams }: PageProps) {
                           const isMe = member.user_id === user.id;
 
                           return (
-                            <div
+                            <Link
                               key={member.id}
-                              className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors opacity-70"
+                              href={`/teams/member/${member.user_id}?team=${selectedTeamId}`}
+                              className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors opacity-70 cursor-pointer"
                             >
                               <div className="w-8 h-8 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center shrink-0 overflow-hidden">
                                 {profile?.avatar_url ? (
@@ -352,10 +355,10 @@ export default async function MembersPage({ searchParams }: PageProps) {
                                   )}
                                 </div>
                               </div>
-                              <Badge variant="secondary" className="text-[10px] shrink-0">
+                              <Badge variant="secondary" className="text-[10px] shrink-0 pointer-events-none">
                                 게스트
                               </Badge>
-                            </div>
+                            </Link>
                           );
                         })}
                       </div>
